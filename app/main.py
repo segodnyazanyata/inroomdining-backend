@@ -157,23 +157,17 @@ def create_order():
     return { 'invoiceUrl': invoice_url }
 
 def json_data(data_file_path: str):
-    """Extracts data from the JSON file.
+    """Reads JSON data from absolute path based on project root."""
+    # Путь до корня проекта (на уровень выше папки app)
+    base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+    full_path = os.path.join(base_path, data_file_path)
 
-    Args:
-      data_file_path: Path to desired JSON file.
-
-    Returns:
-      Data from the desired JSON file (as dict).
-
-    Raises:
-      FileNotFoundError if desired file doesn't exist.
-    """
-    if os.path.exists(data_file_path):
-        with open(data_file_path, 'r') as data_file:
+    if os.path.exists(full_path):
+        with open(full_path, 'r', encoding='utf-8') as data_file:
             return json.load(data_file)
     else:
-        raise FileNotFoundError()
-    
+        raise FileNotFoundError(f'File not found: {full_path}')
+
 
 
 bot.refresh_webhook()
